@@ -8,15 +8,12 @@ import (
 )
 
 func main() {
-
-    logger := log.New(os.Stdout, "MORSE: ", log.LstdFlags|log.Lshortfile)
+    logger := log.New(os.Stdout, "MORSE: ", log.LstdFlags)
     
-
-    srv := server.NewServer(logger)
+    s := server.NewServer(logger)
     
-
-    logger.Println("Запуск сервиса конвертации азбуки Морзе")
-    if err := srv.Run(); err != nil {
-        logger.Fatal("Ошибка сервера:", err)
+    logger.Println("Сервер запущен на http://localhost:8080")
+    if err := s.Run(); err != nil {
+        logger.Fatal("Ошибка запуска сервера:", err)
     }
 }

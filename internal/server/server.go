@@ -8,25 +8,20 @@ import (
 	"github.com/Yandex-Practicum/go1fl-sprint6-final/internal/handlers"
 )
 
-
 type Server struct {
-    Logger     *log.Logger
-    HTTPServer *http.Server
+    logger     *log.Logger
+    httpServer *http.Server
 }
 
-
 func NewServer(logger *log.Logger) *Server {
-
-    mux := http.NewServeMux()
+    router := http.NewServeMux()
     
-
-    mux.HandleFunc("/", handlers.IndexHandler)
-    mux.HandleFunc("/upload", handlers.UploadHandler(logger))
+    router.HandleFunc("/", handlers.IndexHandler)
+    router.HandleFunc("/upload", handlers.UploadHandler)
     
-
     httpServer := &http.Server{
         Addr:         ":8080",
-        Handler:      mux,
+        Handler:      router,
         ErrorLog:     logger,
         ReadTimeout:  5 * time.Second,
         WriteTimeout: 10 * time.Second,
@@ -34,13 +29,12 @@ func NewServer(logger *log.Logger) *Server {
     }
     
     return &Server{
-        Logger:     logger,
-        HTTPServer: httpServer,
+        logger:     logger,
+        httpServer: httpServer,
     }
 }
 
-
+// Run запускает сервер
 func (s *Server) Run() error {
-    s.Logger.Println("Сервер запущен на порту :8080")
-    return s.HTTPServer.ListenAndServe()
+    return s.httpServer.ListenAndServe()
 }
